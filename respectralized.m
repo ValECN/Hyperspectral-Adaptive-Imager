@@ -4,13 +4,20 @@
 % --- Initialization
 load('A.mat');                    % loading a HSI of size (W,R,C)
 IC      = permute(IC2, [2 3 1]);  % permuting to format (R,C,W)
+[R,C,W] = size(IC);
 
 IC_modified      = respectralized_IC(IC,200,800);          % respectralized HSI (moving Gaussian)
 
 panchro = sum(IC_modified,3);     % panchromatic image
-panchro_modified = reconfiguration_2D(panchro, 100, 600);  % reconfigured panchro
+[liste_val, nb_pixels_in_spectra, panchro_modified] = reconfiguration_2D(panchro, 100, 600);  % reconfigured panchro
 
-% --- Plots
+% --- Plots & Prints
+% Delete the finishing ';' to print the information about the number of pixels and their
+% respective values
+for l = 1:length(liste_val)
+    sprintf('There are %d pixels with value %d for the original panchromatic image', nb_pixels_in_spectra(l),round(liste_val(l)));
+end
+
 figure(1)
 plot(squeeze(IC(10,10,:)))
 hold on
@@ -21,16 +28,22 @@ hold on
 plot(squeeze(IC_modified(2,10,:)))
 legend('IC spectra 2','IC modified spectra 2','IC spectra 1','IC modified spectra 1')
 title('Spectra comparison')
+xlabel('Bandwidth')
+ylabel('Amplitude')
 
 figure(2)
 subplot 211
 imagesc(panchro)
 title('Original panchromatic image')
+xlabel('X\_cam')
+ylabel('Y\_cam')
 colorbar
 
 subplot 212
 imagesc(panchro_modified)
 title('Modified panchromatic image')
+xlabel('X\_cam')
+ylabel('Y\_cam')
 colorbar
 
 % --- Function respectralized_IC
@@ -100,7 +113,7 @@ end
 end
 
 % --- Function reconfiguration_2D (same principle but in 2D)
-function I_modified = reconfiguration_2D(I, val_min, val_max) 
+function [liste_val, nb_pixels_in_spectra, I_modified] = reconfiguration_2D(I, val_min, val_max) 
 
 [R, C] = size(I);
 liste_val = [];
@@ -120,14 +133,16 @@ end
 N = length(liste_val);
 liste_val = sort(liste_val, 'ascend');
 pts = linspace(val_min, val_max, N);
-
+nb_pixels_in_spectra = zeros(size(liste_val));
 I_modified = zeros(size(I));
+
 for x = 1:R
     for y = 1:C
         s = I(x,y);
         for n = 1:N
             if s == liste_val(n)
                 I_modified(x,y) = pts(n);
+                nb_pixels_in_spectra(n) = nb_pixels_in_spectra(n) + 1;
             end
         end
     end
