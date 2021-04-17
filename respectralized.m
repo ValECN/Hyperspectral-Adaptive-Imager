@@ -4,9 +4,10 @@
 % --- Initialization
 load('A.mat');                    % loading a HSI of size (W,R,C)
 IC      = permute(IC2, [2 3 1]);  % permuting to format (R,C,W)
-panchro = sum(IC_modified,3);     % panchromatic image
- 
+
 IC_modified      = respectralized_IC(IC,200,800);          % respectralized HSI (moving Gaussian)
+
+panchro = sum(IC_modified,3);     % panchromatic image
 panchro_modified = reconfiguration_2D(panchro, 100, 600);  % reconfigured panchro
 
 % --- Plots
