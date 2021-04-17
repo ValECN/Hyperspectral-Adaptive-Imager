@@ -1,7 +1,7 @@
-load('A.mat') % example input cube
-IC = permute(IC2, [2 3 1]); % input cube in format (R,C,W)
+load('A.mat')
+IC = permute(IC2, [2 3 1]);
  
-IC_modified = respectralized_IC(IC,300,800);
+IC_modified = respectralized_IC(IC,200,800);
 
 figure
 plot(squeeze(IC(10,10,:)))
@@ -14,18 +14,17 @@ plot(squeeze(IC_modified(2,10,:)))
 legend('IC spectra 2','IC modified spectra 2','IC spectra 1','IC modified spectra 1')
 title('Spectra comparison')
 
-function IC_modified = respectralized_IC(IC, lba_min, lba_max) % lba : lambda
+function IC_modified = respectralized_IC(IC, lba_min, lba_max)
+[R,C,W] = size(IC);
 
-if isempty(lba_min)
+if isempty(lba_min) || lba_min > lba_max || lba_min < 0
     lba_min = 400; 
 end
-if isempty(lba_max)
+if isempty(lba_max) || lba_max < lba_min || lba_max > W
     lba_max = 800; 
 end
 
-[R,C,W] = size(IC);
 liste_spectra = [];
-
 
 for x = 1:R
     for y = 1:C
@@ -35,15 +34,15 @@ for x = 1:R
             liste_spectra = index;
         else
             if ismember(index,liste_spectra) ~= 1
-                liste_spectra(length(liste_spectra)+1) = index;  % storing all the different spectrums
+                liste_spectra(length(liste_spectra)+1) = index;
             end
         end
     end
 end
 
 N = length(liste_spectra);
-liste_spectra = sort(liste_spectra, 'ascend');                   % sorting in ascending order the spectrums
-pts = linspace(lba_min, lba_max, N);                             % creating equally separed points in the range(lba_min:lba_max)
+liste_spectra = sort(liste_spectra, 'ascend');
+pts = linspace(lba_min, lba_max, N);
 % interval = 0.5 * (pts(2) - pts(1));
 
 IC_modified = zeros(size(IC));
@@ -53,11 +52,11 @@ for x = 1:R
         [~, index] = max(s);
         for n = 1:N
             if index == liste_spectra(n)
-                gap = pts(n)-liste_spectra(n);                   % quantify the difference between the real spectrum value and its attributed value
+                gap = pts(n)-liste_spectra(n);
                 abs_gap = abs(pts(n)-liste_spectra(n));
                 for w = 1:W
                     if gap > 0
-                        if mod(w+abs_gap,W) == 0                 % trick to skip the 0 value obtained for mod(x,x)
+                        if mod(w+abs_gap,W) == 0
                             modulo = 1;
                         else 
                             modulo = mod(w+abs_gap,W);
