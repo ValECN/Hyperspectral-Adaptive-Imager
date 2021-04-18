@@ -1,7 +1,10 @@
 %% Computing the contours of the image using its isolines
 % Original author: Valentin NOËL
 
-[Gr, Gr_x, Gr_y] = contour_from_isolines(panchro,0.90);
+[~, Gr_x1, ~]    = contour_from_isolines(panchro,0.92);
+[Gr, Gr_x, Gr_y] = contour_from_isolines(panchro_modified,0.92);
+
+diff_methods = (Gr_x - Gr_x1);
 
 % --- Plot
 figure(1)
@@ -20,6 +23,12 @@ ylabel('Y\_cam')
 subplot 122
 imagesc(Gr_y)
 title('Gradient on the y direction')
+xlabel('X\_cam')
+ylabel('Y\_cam')
+
+figure(3)
+imagesc(diff_methods)
+title('Diff plot between the detection with the panchro and with the modified panchro')
 xlabel('X\_cam')
 ylabel('Y\_cam')
 
