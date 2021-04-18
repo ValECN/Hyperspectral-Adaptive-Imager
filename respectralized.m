@@ -6,11 +6,11 @@ load('A.mat');                    % loading a HSI of size (W,R,C)
 IC      = permute(IC2, [2 3 1]);  % permuting to format (R,C,W)
 [R,C,W] = size(IC);
 
-IC_modified      = respectralized_IC(IC,200,800);          % respectralized HSI (moving Gaussian)
+IC_modified = respectralized_IC(IC,200,800);          % respectralized HSI (moving Gaussian)
 
-panchro = sum(IC_modified,3);     % panchromatic image
+panchro = sum(IC,3);     % panchromatic image
 
-[liste_val, nb_pixels_in_spectra, panchro_modified] = reconfiguration_2D(panchro, 100, 1000);  % reconfigured panchro
+[liste_val, nb_pixels_in_spectra, panchro_modified] = reconfiguration_2D(panchro, 100, 5000);  % reconfigured panchro
 
 % --- Plots & Prints
 % Delete the finishing ';' to print the information about the number of pixels and their
