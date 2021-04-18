@@ -33,14 +33,14 @@ xlabel('Bandwidth')
 ylabel('Amplitude')
 
 figure(2)
-subplot 211
+subplot 121
 imagesc(panchro)
 title('Original panchromatic image')
 xlabel('X\_cam')
 ylabel('Y\_cam')
 colorbar
 
-subplot 212
+subplot 122
 imagesc(panchro_modified)
 title('Modified panchromatic image')
 xlabel('X\_cam')
