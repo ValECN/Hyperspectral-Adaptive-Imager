@@ -9,7 +9,8 @@ IC      = permute(IC2, [2 3 1]);  % permuting to format (R,C,W)
 IC_modified      = respectralized_IC(IC,200,800);          % respectralized HSI (moving Gaussian)
 
 panchro = sum(IC_modified,3);     % panchromatic image
-[liste_val, nb_pixels_in_spectra, panchro_modified] = reconfiguration_2D(panchro, 100, 600);  % reconfigured panchro
+
+[liste_val, nb_pixels_in_spectra, panchro_modified] = reconfiguration_2D(panchro, 100, 1000);  % reconfigured panchro
 
 % --- Plots & Prints
 % Delete the finishing ';' to print the information about the number of pixels and their
