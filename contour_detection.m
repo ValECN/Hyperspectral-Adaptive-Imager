@@ -1,4 +1,5 @@
 %% Computing the contours of the image using its isolines
+% Original author: Valentin NOËL
 
 [I, Gr_x, Gr_y] = contour_from_isolines(panchro);
 
