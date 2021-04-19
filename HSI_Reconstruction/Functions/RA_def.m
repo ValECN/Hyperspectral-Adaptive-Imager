@@ -1,6 +1,5 @@
-param_REC.method = 1;                                                       % iterative/CGNE method
-% param_REC.method = 2;                                                      % both methods
-
+param_REC.method = 2;                                                  
+                                        
 param_ED.run = 1;
 param_ED.Nit = 1;
 param_ED.Meth = 6;

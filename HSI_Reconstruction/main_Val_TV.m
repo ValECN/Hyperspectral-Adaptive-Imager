@@ -154,6 +154,11 @@ close all
 figure(1)
 imagesc(sum(I_Threshold,3))
 title('Panchro reconstructed')
+xlabel('X\_cam')
+ylabel('Y\_cam')
 
 figure(2)
 plot(squeeze(I_Threshold(10,10,:)))
+title('Spectra of the reconstructed HSI for x = y = 10')
+xlabel('Bandwidth')
+ylabel('Amplitude')

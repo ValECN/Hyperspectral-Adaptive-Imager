@@ -100,10 +100,21 @@ switch param_REC.method
             
         Cube_REC_direct = permute(I_vect,[3 2 1]);
 
-        param_CGNE.diff_l2(l)= error_HSI(Cuspectrabe_REC, Cube_REC_direct);
         param_CGNE.Error_l2(l)= error_HSI(Cube_PS, Cube_REC, 'l2');
         param_CGNE.Error_l1(l)= error_HSI(Cube_PS, Cube_REC, 'l1');
-        %**************************************************************************
+        
+        figure
+        imagesc(sum(Cube_REC,3))
+        title(sprintf('panchro reconstructed (CGNE) for mu_x = %d and lambda = %d ', param_CGNE.mu_x_vect(l),param_CGNE.lambda))
+        xlabel('X\_cam')
+        ylabel('Y\_cam')
+        
+        figure
+        imagesc(sum(Cube_REC_direct,3))
+        title(sprintf('panchro reconstructed (inversion) for mu_x = %d and lambda = %d ', param_CGNE.mu_x_vect(l),param_CGNE.lambda))
+        xlabel('X\_cam')
+        ylabel('Y\_cam')
+
 %         end
     case 1
         
@@ -122,8 +133,8 @@ switch param_REC.method
             figure
             plot(squeeze(Cube_REC(10,10,:,l)))
             title('Spectra of the reconstructed cube for x = y = 10')
-            xlabel('X\_cam')
-            ylabel('Y\_cam')
+            xlabel('Bandwidth')
+            ylabel('Amplitude')
             
             %**************************************************************************
 %         end
@@ -131,8 +142,11 @@ switch param_REC.method
         figure
         imagesc(sum(Cube_REC(:,:,:,l),3))
         title(sprintf('panchro reconstructed for mu_x = %d and lambda = %d ', param_CGNE.mu_x_vect(l),param_CGNE.lambda))
+        xlabel('X\_cam')
+        ylabel('Y\_cam')
         
     case 0
+        
         iter = 1;
         stop_iter = 10;
         mini = zeros(stop_iter,1);
@@ -181,7 +195,9 @@ switch param_REC.method
     figure
     imagesc(sum(Cube_REC(:,:,:,1),3))
     title(sprintf('panchro reconstructed for mu_x = %d and lambda = %d ', param_CGNE.mu_x_vect(1),param_CGNE.lambda))
-
+    xlabel('X\_cam')
+    ylabel('Y\_cam')
+    
     figure
     for k = 2:S
         ecart = (sum(Cube_REC(:,:,3,k)) - sum(IC,3))^2;
@@ -191,16 +207,23 @@ switch param_REC.method
         title(sprintf('Panchro rec. for mu\_x = %d and lambda = %d', param_CGNE.mu_x_vect(k),param_CGNE.lambda))
         hold on
     end
-
+    xlabel('X\_cam')
+    ylabel('Y\_cam')
 end
 
 %% --- Plots
 figure 
 imagesc(sum(I,3))
 title('panchro input')
+xlabel('X\_cam')
+ylabel('Y\_cam')
 
 figure
-imagesc(sum(Cube_REC(:,:,:,l),3))
+if length(size(Cube_REC)) > 3
+    imagesc(sum(Cube_REC(:,:,:,l),3))
+else
+    imagesc(sum(Cube_REC,3))
+end
 hold on
 
 % plot the contours
@@ -209,10 +232,4 @@ plot([C2-0.5, C2+0.5]', [L2+0.5, L2+0.5]','r','LineWidth',2,'PickableParts','non
 hold off
 title('Contours detected plotted on the reconstruted HSI')
 xlabel('X\_cam')
-ylabel('Y\_cam')
-
-%%
-
-
-               
-                    
+ylabel('Y\_cam')                  
