@@ -1,8 +1,10 @@
 %% Reconstruction using Tikhonov regularization
 % Original author: Valentin NOËL based on Dr.Ardi's work
 % path_directory = '/home2/vnoel/Documents/Simulateur/simulator_playground/acquisition_data';
-addpath '/Functions'
+
+addpath 'Functions'
 path_directory = [pwd, '/acquisition_data'];
+
 % [FCS, I, panchro, DMD_conf, IC] = rebuild_aqucube_Val(path_directory);
 [FCS, I, panchro, DMD_conf, IC] = rebuild_aqucube(path_directory);
 panchro = panchro(:,:,1);
@@ -117,7 +119,11 @@ switch param_REC.method
             param_CGNE.Error_l2(l)= error_HSI(Cube_PS, Cube_REC(:,:,:,l), 'l2');
             param_CGNE.Error_l1(l)= error_HSI(Cube_PS, Cube_REC(:,:,:,l), 'l1');
             
+            figure
             plot(squeeze(Cube_REC(10,10,:,l)))
+            title('Spectra of the reconstructed cube for x = y = 10')
+            xlabel('X\_cam')
+            ylabel('Y\_cam')
             
             %**************************************************************************
 %         end
