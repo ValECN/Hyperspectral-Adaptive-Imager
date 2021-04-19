@@ -1,7 +1,11 @@
-path_directory = '.../acquisition_data';
+%% Reconstruction using Total Variation regularization
+% Original author: Valentin NOËL based on Dr.Rodriguez and Dr.Wohlberg's
+% work (NUMIPAD library)
+
+addpath '/home2/vnoel/Documents/irntv'
+path_directory = [pwd, '/acquisition_data'];
 
 [FCS, I, panchro, DMD_conf, IC] = rebuild_aqucube(path_directory);
-
 
 %% Script TV
 %% Parameters and Constants
@@ -127,8 +131,8 @@ t = tic;
 I_Threshold = irntv_HC(data, {hand_K,hand_KT}, lambda, pars_irn);
 toc(t)
 e_time=toc(t);
-fprintf('Sauvegarde\n')
-eval(sprintf('save Result_TV_lambda%.2e_it%d.mat I_Threshold e_time \n', lambda,pars_irn.loops))
+% fprintf('Sauvegarde\n')
+% eval(sprintf('save Result_TV_lambda%.2e_it%d.mat I_Threshold e_time \n', lambda,pars_irn.loops))
 
 close all
 
