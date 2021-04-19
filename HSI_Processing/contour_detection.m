@@ -5,6 +5,8 @@
 [Gr, Gr_x, Gr_y] = contour_from_isolines(panchro_modified,0.92);
 
 diff_methods = (Gr_x - Gr_x1);
+[L1, C1] = find(Gr_x);
+[L2, C2] = find(Gr_y);
 
 % --- Plot
 figure(1)
@@ -29,6 +31,17 @@ ylabel('Y\_cam')
 figure(3)
 imagesc(diff_methods)
 title('Diff plot between the detection with the panchro and with the modified panchro')
+xlabel('X\_cam')
+ylabel('Y\_cam')
+
+figure(4)
+imagesc(panchro_modified)
+hold on
+% plot the contours
+plot([C1+ 0.5, C1+0.5]',[L1+0.5, L1-0.5]','r','LineWidth',2,'PickableParts','none');
+plot([C2-0.5, C2+0.5]', [L2+0.5, L2+0.5]','r','LineWidth',2,'PickableParts','none');
+hold off
+title('Contours detected plotted on the modified panchro')
 xlabel('X\_cam')
 ylabel('Y\_cam')
 
