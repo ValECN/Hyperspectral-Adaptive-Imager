@@ -2,7 +2,8 @@
 % Original author: Valentin NOËL based on Dr.Rodriguez and Dr.Wohlberg's
 % work (NUMIPAD library)
 
-addpath '/home2/vnoel/Documents/irntv'
+addpath '/irntv'
+addpath 'Functions'
 path_directory = [pwd, '/acquisition_data'];
 
 [FCS, I, panchro, DMD_conf, IC] = rebuild_aqucube(path_directory);

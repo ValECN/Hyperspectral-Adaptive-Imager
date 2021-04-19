@@ -1,6 +1,7 @@
 %% Reconstruction using Tikhonov regularization
 % Original author: Valentin NOËL based on Dr.Ardi's work
 % path_directory = '/home2/vnoel/Documents/Simulateur/simulator_playground/acquisition_data';
+addpath '/Functions'
 path_directory = [pwd, '/acquisition_data'];
 % [FCS, I, panchro, DMD_conf, IC] = rebuild_aqucube_Val(path_directory);
 [FCS, I, panchro, DMD_conf, IC] = rebuild_aqucube(path_directory);
