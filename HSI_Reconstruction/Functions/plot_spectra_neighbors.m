@@ -1,4 +1,4 @@
-function plot_spectra_neighbors(image)
+function plot_spectra_neighbors(image,C1,C2,L1,L2)
 [R,C,W] = size(image);
 
 if W > 1
@@ -6,6 +6,14 @@ if W > 1
 end
 
 imagesc(image_2D);
+hold on
+plot([C1+ 0.5, C1+0.5]',[L1+0.5, L1-0.5]','r','LineWidth',2,'PickableParts','none');
+plot([C2-0.5, C2+0.5]', [L2+0.5, L2+0.5]','r','LineWidth',2,'PickableParts','none');
+hold off
+title('Contours detected plotted on the reconstruted HSI')
+xlabel('X\_cam')
+ylabel('Y\_cam')
+
 [x, y] = ginput(1);
 
 x = round(x); y = round(y);

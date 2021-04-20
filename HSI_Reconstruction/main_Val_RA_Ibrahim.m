@@ -213,28 +213,20 @@ switch param_REC.method
 end
 %% --- Spectral binning
 
-if length(size(Cube_REC)) > 3
-    Cube_REC = Cube_REC(:,:,:,l);
-end
-    
-Cube_REC_bin = zeros(R,C,round(W/2));
-
-for r = 1:R
-    for c = 1:C
-        for w = 1:size(Cube_REC_bin,3)
-            Cube_REC_bin(r,c,w) = (Cube_REC(r,c,(2*w-1)) + Cube_REC(r,c,(2*w)))/2;
-        end
-    end
-end
+Cube_REC_bin = spectral_binning(Cube_REC, 2);
+IC_bin = spectral_binning(IC, 8);
 
 %% --- Plots
 
 figure
 plot(squeeze(Cube_REC_bin(10,10,:)))
-title('Spectrally binned reconstructed cube')
+hold on
+plot(squeeze(IC_bin(10,10,:)))
+title('Spectrally binned input and reconstructed cube bandwidth')
 xlabel('Bandwidth')
 ylabel('Amplitude')
-    
+legend('Reconstructed spectra','Original spectra')   
+
 figure 
 imagesc(sum(I,3))
 title('panchro input')
@@ -256,14 +248,17 @@ xlabel('X\_cam')
 ylabel('Y\_cam')
 
 %% --- Visualization
-addpath Visualisation/
+% addpath Visualisation/
+% 
+% Object = Cube_REC_bin;
+% save('Object.mat','Object')
+% 
+% if length(size(Cube_REC)) > 3
+%     Visual_HyperSpectral_2019(Cube_REC(:,:,:,l))
+% else
+%     Visual_HyperSpectral_2019(Cube_REC,3)
+% end
 
-Object = Cube_REC_bin;
-save('Object.mat','Object')
 
-if length(size(Cube_REC)) > 3
-    Visual_HyperSpectral_2019(Cube_REC(:,:,:,l))
-else
-    Visual_HyperSpectral_2019(Cube_REC,3)
-end
+% plot_spectra_neighbors(Cube_REC_bin,C1,C2,L1,L2)
 

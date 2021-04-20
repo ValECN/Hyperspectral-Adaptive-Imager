@@ -12,7 +12,7 @@ param_OBJ.rho = .5;
 param_OBJ.MAX_ADU = 3800;
 param_OBJ.bits = 12;
 
-param_CGNE.lambda = 10000;
+param_CGNE.lambda = 4e6;
 param_CGNE.mu_x_vect = logspace(-7,2,11);
 param_CGNE.mu_y_vect = param_CGNE.mu_x_vect;
 param_CGNE.mu_lambda_vect = param_CGNE.mu_x_vect * param_CGNE.lambda;
@@ -24,4 +24,4 @@ param_CGNE.x0 = 0;
 param_CGNE.diff_l2 = zeros(length(param_CGNE.mu_x_vect),1);
 param_CGNE.Error_l2 = zeros(length(param_CGNE.mu_x_vect),1);
 param_CGNE.Error_l1 = zeros(length(param_CGNE.mu_x_vect),1);
-param_CGNE.stop_crit = 300;
+param_CGNE.stop_crit = 150;
