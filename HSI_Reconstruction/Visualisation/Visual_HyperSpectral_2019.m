@@ -57,6 +57,7 @@ function Visual_HyperSpectral_2019_OpeningFcn(hObject, eventdata, handles, varar
 % handles    structure with handles and user data (see GUIDATA)
 % varargin   command line arguments to Visual_HyperSpectral_2019 (see VARARGIN)
 
+
 % Choose default command line output for Visual_HyperSpectral_2019
 handles.output = hObject;
 
@@ -137,13 +138,13 @@ else
     RGB = hypercube_to_RGB(Object_init);
     axes(handles.axes_panchro)
     hold off
-    imshow(panchro_init.^Gamma,[])
+    imagesc(panchro_init.^Gamma)
     axis on
     xlabel('x'); ylabel('y')
     title('panchromatic ')
     axes(handles.axes_RGB)
     hold off
-    imshow(RGB.^Gamma,[])
+    imagesc(RGB.^Gamma)
     axis on
     xlabel('x'); ylabel('y')
     title('RGB')
@@ -177,14 +178,14 @@ RGB = getappdata(0,'RGB_init');
 panchro = sum(Object_cube,3);
 axes(handles.axes_panchro)
 hold off
-imshow(panchro.^Gamma,[]);
+imagesc(panchro.^Gamma);
 axis on
 xlabel('x'); ylabel('y')
 title('panchromatic ')
 axes(handles.axes_RGB)
 hold off
 %imshow(RGB,[]);
-imshow(RGB.^Gamma,[])
+imagesc(RGB.^Gamma)
 axis on
 xlabel('x'); ylabel('y')
 title('RGB ')
@@ -215,14 +216,14 @@ if rect(3)>5 && rect(4)>5
     Object_cube = Object_cube(Y(1): Y(2),X(1):X(2),:);
     axes(handles.axes_panchro)
     hold off
-    imshow(sum(Object_cube,3).^Gamma,[]);
+    imagesc(sum(Object_cube,3).^Gamma);
     axis on
     xlabel('x'); ylabel('y')
     title('panchromatic')
     RGB = RGB(Y(1): Y(2),X(1):X(2),:);
     axes(handles.axes_RGB)
     hold off
-    imshow(RGB.^Gamma,[])
+    imagesc(RGB.^Gamma)
     axis on
     xlabel('x'); ylabel('y')
     title('RGB')
@@ -244,14 +245,14 @@ global Gamma;
 Object_cube = getappdata(0,'Object_cube');
 axes(handles.axes_panchro)
 hold off
-imshow(sum(Object_cube,3).^Gamma,[])
+imagesc(sum(Object_cube,3).^Gamma)
 title('panchromatic ')
 axis on
 xlabel('x'); ylabel('y')
 RGB = getappdata(0,'RGB');
 axes(handles.axes_RGB)
 hold off
-imshow(RGB.^Gamma,[])
+imagesc(RGB.^Gamma)
 axis on
 xlabel('x'); ylabel('y')
 title('RGB ')
@@ -269,7 +270,7 @@ title(['x = ' num2str(c) '      y = ' num2str(r)])
 
 axes(handles.axes_visible)
 vis=imread('Visible.jpg');
-imshow(vis); axis off
+imagesc(vis); axis off
 %xlabel('W')
 
 axes(handles.axes_panchro)
@@ -285,7 +286,7 @@ plot([c c],[1 size(Object_cube,1)], 'red')
 axes(handles.axes_xl)
 A = Object_cube(r,:,:);
 A = reshape(A, size(A,2), size(A,3));
-imagesc(A',[0 1]); colorbar
+imagesc(A'); colorbar
 title(['y = ' num2str(r)])
 xlabel('x')
 ylabel('W')
@@ -293,7 +294,7 @@ ylabel('W')
 axes(handles.axes_yl)
 A = Object_cube(:,c,:);
 A = reshape(A, size(A,1), size(A,3));
-imagesc(A,[0 1]); colorbar
+imagesc(A); colorbar
 title(['x = ' num2str(c)])
 xlabel('W')
 ylabel('y')
@@ -332,7 +333,7 @@ if ~isempty(W),
     set(handles.edit_W,'String',W);
     handles.edit_W.Visible='on';
     axes(handles.axes_xy)
-    imshow(Object_cube(:,:,W).^Gamma,[]); % colorbar
+    imagesc(Object_cube(:,:,W).^Gamma); % colorbar
     axis on
     title(['W = ' num2str(W)])
     xlabel('x')
@@ -358,7 +359,7 @@ if W==floor(W) && W>=1 && W<=size(Object_cube,3)
   cla(handles.axes_xy)
   set(handles.slider_W,'Value',W);
   axes(handles.axes_xy)
-  imshow(Object_cube(:,:,W).^Gamma,[]); % colorbar
+  imagesc(Object_cube(:,:,W).^Gamma); % colorbar
   title(['W = ' num2str(W)])
   xlabel('x')
   ylabel('y')
@@ -394,7 +395,7 @@ cla(handles.axes_xy)
 set(handles.edit_W,'String',W);
 handles.edit_W.Visible='on';
 axes(handles.axes_xy)
-imshow(Object_cube(:,:,W).^Gamma,[]); % colorbar
+imagesc(Object_cube(:,:,W).^Gamma); % colorbar
 axis on
 title(['W = ' num2str(W)])
 xlabel('x')

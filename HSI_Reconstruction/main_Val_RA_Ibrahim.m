@@ -33,11 +33,14 @@ if param_ED.run == 1
     [Gr, Gr_x, Gr_y] = contour_from_isolines(panchro_modified,0.92);
 end
 
-Gr_x = [Gr_x, zeros(R,1)];
-Gr_y = [Gr_y; zeros(1,R)];
+nGr_x = [Gr_x, zeros(R,1)];
+nGr_y = [Gr_y; zeros(1,R)];
 
-[L1, C1] = find(Gr_x);
-[L2, C2] = find(Gr_y);
+Gr_x = 1 - nGr_x;
+Gr_y = 1 - nGr_y;
+
+[L1, C1] = find(nGr_x);
+[L2, C2] = find(nGr_y);
 
 %%
 Num_iter = zeros(length(param_CGNE.mu_x_vect),1);
@@ -86,7 +89,7 @@ switch param_REC.method
         gamma = spdiags((1./I_V),0,R*C*S,R*C*S);
         Temp_vect = H_C'*gamma*I_V;
 
-%         for l = 1:length(param_CGNE.mu_x_vect)
+        for l = 1:length(param_CGNE.mu_x_vect)
 
         param_CGNE.mu_x = param_CGNE.mu_x_vect(l);
         param_CGNE.mu_y = param_CGNE.mu_x_vect(l);
@@ -116,12 +119,13 @@ switch param_REC.method
         xlabel('X\_cam')
         ylabel('Y\_cam')
 
-%         end
+        end
     case 1
         
-%         for l = 1:N
+        for l = 1:length(param_CGNE.mu_x_vect)
+            
             param_CGNE.mu_x = param_CGNE.mu_x_vect(l);
-            param_CGNE.mu_y = param_CGNE.mu_x_vect(l);
+            param_CGNE.mu_y = param_CGNE.mu_y_vect(l);
             param_CGNE.mu_lambda = param_CGNE.mu_lambda_vect(l);
 
             tic
@@ -131,15 +135,14 @@ switch param_REC.method
             param_CGNE.Error_l2(l)= error_HSI(Cube_PS, Cube_REC(:,:,:,l), 'l2');
             param_CGNE.Error_l1(l)= error_HSI(Cube_PS, Cube_REC(:,:,:,l), 'l1');
             
-            figure
-            plot(squeeze(Cube_REC(10,10,:,l)))
-            title('Spectra of the reconstructed cube for x = y = 10')
-            xlabel('Bandwidth')
-            ylabel('Amplitude')
+%             figure
+%             plot(squeeze(Cube_REC(10,10,:,l)))
+%             title(sprintf('Spectra of the reconstructed cube for x = y = 10 and mu_x = %d', param_CGNE.mu_x_vect(l)))
+%             xlabel('Bandwidth')
+%             ylabel('Amplitude')
             
-            %**************************************************************************
-%         end
-
+        end
+        % --- Plots
         figure
         imagesc(sum(Cube_REC(:,:,:,l),3))
         title(sprintf('panchro reconstructed for mu_x = %d and lambda = %d ', param_CGNE.mu_x_vect(l),param_CGNE.lambda))
@@ -192,9 +195,9 @@ switch param_REC.method
 
     otherwise
         disp('Enter another value for param_REC.method')
-
+    
     figure
-    imagesc(sum(Cube_REC(:,:,:,1),3))
+    imagesc(sum(Cube_REC,3))
     title(sprintf('panchro reconstructed for mu_x = %d and lambda = %d ', param_CGNE.mu_x_vect(1),param_CGNE.lambda))
     xlabel('X\_cam')
     ylabel('Y\_cam')
@@ -212,20 +215,23 @@ switch param_REC.method
     ylabel('Y\_cam')
 end
 %% --- Spectral binning
-
-Cube_REC_bin = spectral_binning(Cube_REC, 2);
-IC_bin = spectral_binning(IC, 8);
+% Cube_REC = Cube_REC(:,:,:,1); % binning to do on the FC
+% Cube_REC_bin = spectral_binning(Cube_REC, 2);
+% IC_bin = spectral_binning(IC, 8);
 
 %% --- Plots
+% l = 6;
+% figure
+% plot(squeeze(Cube_REC(10,10,:)))
+% hold on
+% plot(squeeze(IC(10,10,:)))
+% title('Spectrally binned input and reconstructed cube bandwidth')
+% xlabel('Bandwidth')
+% ylabel('Amplitude')
+% legend('Reconstructed spectra','Original spectra')   
 
 figure
-plot(squeeze(Cube_REC_bin(10,10,:)))
-hold on
-plot(squeeze(IC_bin(10,10,:)))
-title('Spectrally binned input and reconstructed cube bandwidth')
-xlabel('Bandwidth')
-ylabel('Amplitude')
-legend('Reconstructed spectra','Original spectra')   
+plot(squeeze(Cube_REC(2,10,:)))
 
 figure 
 imagesc(sum(I,3))
@@ -239,6 +245,7 @@ if length(size(Cube_REC)) > 3
 else
     imagesc(sum(Cube_REC,3))
 end
+
 hold on
 plot([C1+ 0.5, C1+0.5]',[L1+0.5, L1-0.5]','r','LineWidth',2,'PickableParts','none');
 plot([C2-0.5, C2+0.5]', [L2+0.5, L2+0.5]','r','LineWidth',2,'PickableParts','none');
@@ -248,9 +255,10 @@ xlabel('X\_cam')
 ylabel('Y\_cam')
 
 %% --- Visualization
+
 % addpath Visualisation/
 % 
-% Object = Cube_REC_bin;
+% Object = Cube_REC;
 % save('Object.mat','Object')
 % 
 % if length(size(Cube_REC)) > 3
