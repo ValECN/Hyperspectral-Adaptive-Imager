@@ -1,6 +1,8 @@
 %% Re-spectralization and re-configuration of Hyperspectral Images and Panchromatic Images
 % Original author: Valentin NOËL
 
+addpath 'HSI'
+
 input_cube = 1;                          % change this variable to change case
 
 switch input_cube
