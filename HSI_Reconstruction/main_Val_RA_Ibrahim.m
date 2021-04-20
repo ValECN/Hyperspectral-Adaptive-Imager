@@ -1,5 +1,5 @@
 %% *** Reconstruction using Tikhonov regularization
-%% *** Original author: Valentin NOËL based on Dr.Ardi's work
+% *** Original author: Valentin NOËL based on Dr.Ardi's work
 
 %% --- Initialization:
 
@@ -118,13 +118,7 @@ switch param_REC.method
 
            % param_CGNE.Error_l2(l)= error_HSI(Cube_PS, Cube_REC, 'l2');
            % param_CGNE.Error_l1(l)= error_HSI(Cube_PS, Cube_REC, 'l1');
-            
-            figure
-            plot(squeeze(Cube_REC))
-            title(sprintf('Spectra of the reconstructed cube for x = y = 10 and mu_x = %d', param_CGNE.mu_x_vect))
-            xlabel('Bandwidth')
-            ylabel('Amplitude')
-            
+                      
         end
 
     otherwise    
@@ -139,9 +133,9 @@ IC_bin = spectral_binning(IC, 4);
 
 figure(1)
 x1 = 10; x2 = 2; y1 = 10; 
-plot(squeeze(Cube_REC(x1,y,:)))
+plot(squeeze(Cube_REC(x1,y1,:)))
 hold on 
-plot(squeeze(Cube_REC(x2,y,:)))
+plot(squeeze(Cube_REC(x2,y1,:)))
 title('Spectra of the reconstructed cube')
 xlabel('Bandwidth')
 ylabel('Amplitude')
