@@ -1,6 +1,12 @@
 %% *** Reconstruction using Tikhonov regularization
-% Original author: Valentin NOËL based on Dr.Ardi's work
-% path_directory = '/home2/vnoel/Documents/Simulateur/simulator_playground/acquisition_data';
+%% *** Original author: Valentin NOËL based on Dr.Ardi's work
+
+%% --- Initialization:
+
+clear all
+close all
+
+%% --- Directories management:
 
 addpath Functions/
 addpath Visualisation/
@@ -95,15 +101,10 @@ switch param_REC.method
             
         Cube_REC_direct = permute(I_vect,[3 2 1]);
 
-        param_CGNE.Error_l2(l)= error_HSI(Cube_PS, Cube_REC, 'l2');
-        param_CGNE.Error_l1(l)= error_HSI(Cube_PS, Cube_REC, 'l1');
-        
-        figure
-        imagesc(sum(Cube_REC,3))
-        title(sprintf('panchro reconstructed (CGNE) for mu\_x = %d and lambda = %d ', param_CGNE.mu_x_vect,param_CGNE.lambda))
-        xlabel('X\_cam')
-        ylabel('Y\_cam')
-        
+        %param_CGNE.Error_l2(l)= error_HSI(Cube_PS, Cube_REC, 'l2');
+        %param_CGNE.Error_l1(l)= error_HSI(Cube_PS, Cube_REC, 'l1');
+    
+        % -- Specific plot for the direct inversion reconstruction plot:
         figure
         imagesc(sum(Cube_REC_direct,3))
         title(sprintf('panchro reconstructed (inversion) for mu\_x = %d and lambda = %d ', param_CGNE.mu_x_vect(l),param_CGNE.lambda))
@@ -123,8 +124,8 @@ switch param_REC.method
             [Cube_REC,epsilon_dx,epsilon_gradx,~] = CGNE_Val(I,FCS,Gr_x,Gr_y, param_CGNE);
             toc
 
-            param_CGNE.Error_l2(l)= error_HSI(Cube_PS, Cube_REC, 'l2');
-            param_CGNE.Error_l1(l)= error_HSI(Cube_PS, Cube_REC, 'l1');
+           % param_CGNE.Error_l2(l)= error_HSI(Cube_PS, Cube_REC, 'l2');
+           % param_CGNE.Error_l1(l)= error_HSI(Cube_PS, Cube_REC, 'l1');
             
             figure
             plot(squeeze(Cube_REC))
@@ -134,8 +135,8 @@ switch param_REC.method
             
         end
 
-    otherwise
-        disp('Enter another value for param_REC.method')   
+    otherwise    
+        disp('Enter another value for param_REC.method')      
 end
 
 %% --- Spectral binning
@@ -144,7 +145,7 @@ IC_bin = spectral_binning(IC, 4);
 
 %% --- Plots
 
-figure
+figure(1)
 x1 = 10; x2 = 2; y1 = 10; 
 plot(squeeze(Cube_REC(x1,y,:)))
 hold on 
@@ -154,13 +155,8 @@ xlabel('Bandwidth')
 ylabel('Amplitude')
 legend(sprintf('Spectra Reconstruction for x = %d and y = %d',x1,y1),sprintf('Spectra Reconstruction for x = %d and y = %d',x2,y1))
 
-figure
-if length(size(Cube_REC)) > 3
-    imagesc(sum(Cube_REC(:,:,:,l),3))
-else
-    imagesc(sum(Cube_REC,3))
-end
-
+figure(2)
+imagesc(sum(Cube_REC,3))
 hold on
 plot([C1+ 0.5, C1+0.5]',[L1+0.5, L1-0.5]','r','LineWidth',2,'PickableParts','none');
 plot([C2-0.5, C2+0.5]', [L2+0.5, L2+0.5]','r','LineWidth',2,'PickableParts','none');
