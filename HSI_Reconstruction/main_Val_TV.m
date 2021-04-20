@@ -11,7 +11,7 @@ path_directory = [pwd, '/acquisition_data'];
 %% Script TV
 %% Parameters and Constants
 x0=0;
-ml=-5;my=-2;mx=my;
+ml=-1;my=-1;mx=my;
 mu_y=10^(my);mu_x=10^(mx);mu_lambda=10^(ml);
 
 r_l=1200; c_l=r_l;
@@ -118,7 +118,7 @@ pars_irn.rrs=1e1;
 pars_irn.loops=10;
 %lambda = 0.075;
 pars_irn.lambda = 1;
-lambda = 10;
+lambda = 1;
 
 % for lambda = % %1e-3 1e-2 1e-1 1 10 100]
 fprintf('---------------------------------\n')

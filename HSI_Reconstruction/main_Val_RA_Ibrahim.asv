@@ -5,12 +5,12 @@
 addpath Functions/
 addpath Visualisation/
 path_directory = [pwd, '/acquisition_data'];
+RA_def; % file containing all the parameters
 
 %% --- Acquiring the wanted information from the simulated HSI:
 
 [FCS, I, panchro, DMD_conf, IC] = rebuild_aqucube(path_directory);
 [R, C, W, S] = size(FCS);
-RA_def; % file containing all the parameters
 
 %% --- Re-configuration of the panchro for better contour detection:
 
@@ -43,7 +43,7 @@ switch param_REC.method
     case 2 % Both methods
     
         H_C = sparse(R*C*S,R*C*W);  % compensated H
-        H_NC = sparse(R*C*S,R*C*W); % non-compensated H
+        H_NC = sparse(R*C*S,R*C*W);
 
         I_in = (1:C*W*R); 
         J_in = ceil(I_in/W);
@@ -59,8 +59,8 @@ switch param_REC.method
             A_C  = (sparse(I_in,J_in,FCS_C)');
             A_NC = (sparse(I_in,J_in,FCS_NC)');
 
-            H_C((s-1)*R*C+1:s*R*C,:) = A_C;
-            H_NC((s-1)*R*C+1:s*R*C,:)= A_NC;  
+            H_C([(s-1)*R*C+1:s*R*C],:) = A_C;
+            H_NC([(s-1)*R*C+1:s*R*C],:)= A_NC;  
 
         end
 
@@ -87,7 +87,7 @@ switch param_REC.method
         param_CGNE.mu_lambda = param_CGNE.mu_lambda_vect(l);
         
         tic
-        [Cube_REC,epsilon_dx,epsilon_gradx,~] = CGNE_Val(I,FCS,Gr_x,Gr_y, param_CGNE);
+        [Cube_REC,epsilon_dx,epsilon_gradx,Num_iter(l)] = CGNE_Val(I,FCS,Gr_x,Gr_y, param_CGNE);
         toc
         
         I_vect = (H_C'*gamma*H_C+ param_CGNE.mu_x*(D_x)'*D_x+param_CGNE.mu_y*(D_y)'*D_y + param_CGNE.mu_lambda*(D_lambda')*D_lambda)\Temp_vect;
@@ -120,14 +120,14 @@ switch param_REC.method
             param_CGNE.mu_lambda = param_CGNE.mu_lambda_vect(l);
 
             tic
-            [Cube_REC,epsilon_dx,epsilon_gradx,~] = CGNE_Val(I,FCS,Gr_x,Gr_y, param_CGNE);
+            [Cube_REC(:,:,:,l),epsilon_dx,epsilon_gradx,Num_iter(l)] = CGNE_Val(I,FCS,Gr_x,Gr_y, param_CGNE);
             toc
 
-            param_CGNE.Error_l2(l)= error_HSI(Cube_PS, Cube_REC, 'l2');
-            param_CGNE.Error_l1(l)= error_HSI(Cube_PS, Cube_REC, 'l1');
+            param_CGNE.Error_l2(l)= error_HSI(Cube_PS, Cube_REC(:,:,:,l), 'l2');
+            param_CGNE.Error_l1(l)= error_HSI(Cube_PS, Cube_REC(:,:,:,l), 'l1');
             
             figure
-            plot(squeeze(Cube_REC))
+            plot(squeeze(Cube_REC(10,10,:)))
             title(sprintf('Spectra of the reconstructed cube for x = y = 10 and mu_x = %d', param_CGNE.mu_x_vect))
             xlabel('Bandwidth')
             ylabel('Amplitude')
@@ -175,5 +175,12 @@ ylabel('Y\_cam')
 Object = Cube_REC;
 save('Object.mat','Object')
 
-% -- Visualization
-Visual_HyperSpectral_2019(Cube_REC)
+
+    Visual_HyperSpectral_2019(Cube_REC(:,:,:,l))
+else
+    Visual_HyperSpectral_2019(Cube_REC,3)
+end
+
+
+% plot_spectra_neighbors(Cube_REC,C1,C2,L1,L2)
+
