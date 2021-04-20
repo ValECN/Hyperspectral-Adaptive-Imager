@@ -1,4 +1,4 @@
-param_REC.method = 2;                                                  
+param_REC.method = 1;                                                  
                                         
 param_ED.run = 1;
 param_ED.Nit = 1;
@@ -12,7 +12,7 @@ param_OBJ.rho = .5;
 param_OBJ.MAX_ADU = 3800;
 param_OBJ.bits = 12;
 
-param_CGNE.lambda = 200;
+param_CGNE.lambda = 10000;
 param_CGNE.mu_x_vect = logspace(-7,2,11);
 param_CGNE.mu_y_vect = param_CGNE.mu_x_vect;
 param_CGNE.mu_lambda_vect = param_CGNE.mu_x_vect * param_CGNE.lambda;

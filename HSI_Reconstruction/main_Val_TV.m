@@ -118,7 +118,7 @@ pars_irn.rrs=1e1;
 pars_irn.loops=10;
 %lambda = 0.075;
 pars_irn.lambda = 1;
-lambda = 1;
+lambda = 10;
 
 % for lambda = % %1e-3 1e-2 1e-1 1 10 100]
 fprintf('---------------------------------\n')

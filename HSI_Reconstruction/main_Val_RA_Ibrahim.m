@@ -2,7 +2,8 @@
 % Original author: Valentin NOËL based on Dr.Ardi's work
 % path_directory = '/home2/vnoel/Documents/Simulateur/simulator_playground/acquisition_data';
 
-addpath 'Functions'
+addpath Functions/
+addpath Visualisation/
 path_directory = [pwd, '/acquisition_data'];
 
 % [FCS, I, panchro, DMD_conf, IC] = rebuild_aqucube_Val(path_directory);
@@ -10,7 +11,7 @@ path_directory = [pwd, '/acquisition_data'];
 panchro = panchro(:,:,1);
 %%
 [liste_val, nb_pixels_in_spectra, panchro_modified] = reconfiguration_2D(panchro, 100, 1000);  % reconfigured panchro
-l = 6;
+l = 5;
 RA_def;
 
 %% RA Ibrahim
@@ -210,8 +211,30 @@ switch param_REC.method
     xlabel('X\_cam')
     ylabel('Y\_cam')
 end
+%% --- Spectral binning
+
+if length(size(Cube_REC)) > 3
+    Cube_REC = Cube_REC(:,:,:,l);
+end
+    
+Cube_REC_bin = zeros(R,C,round(W/2));
+
+for r = 1:R
+    for c = 1:C
+        for w = 1:size(Cube_REC_bin,3)
+            Cube_REC_bin(r,c,w) = (Cube_REC(r,c,(2*w-1)) + Cube_REC(r,c,(2*w)))/2;
+        end
+    end
+end
 
 %% --- Plots
+
+figure
+plot(squeeze(Cube_REC_bin(10,10,:)))
+title('Spectrally binned reconstructed cube')
+xlabel('Bandwidth')
+ylabel('Amplitude')
+    
 figure 
 imagesc(sum(I,3))
 title('panchro input')
@@ -225,11 +248,22 @@ else
     imagesc(sum(Cube_REC,3))
 end
 hold on
-
-% plot the contours
 plot([C1+ 0.5, C1+0.5]',[L1+0.5, L1-0.5]','r','LineWidth',2,'PickableParts','none');
 plot([C2-0.5, C2+0.5]', [L2+0.5, L2+0.5]','r','LineWidth',2,'PickableParts','none');
 hold off
 title('Contours detected plotted on the reconstruted HSI')
 xlabel('X\_cam')
-ylabel('Y\_cam')                  
+ylabel('Y\_cam')
+
+%% --- Visualization
+addpath Visualisation/
+
+Object = Cube_REC_bin;
+save('Object.mat','Object')
+
+if length(size(Cube_REC)) > 3
+    Visual_HyperSpectral_2019(Cube_REC(:,:,:,l))
+else
+    Visual_HyperSpectral_2019(Cube_REC,3)
+end
+

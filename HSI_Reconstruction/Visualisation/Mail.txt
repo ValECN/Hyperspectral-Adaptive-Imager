@@ -1,0 +1,21 @@
+Hi, You will find attached an interface based on Tony's work to visualize Hyperspectral data.
+
+To use it you have to
+- Call HyperSpectral_Visualization_Interface_2020 from Matlab
+- Load an HyperSpectral Object (any .mat file with an HS cube in an "Object" variable)
+    You can download such a file there
+- You can zoom on a small area ofthe image :
+    Click on the "Zoom" Button and select an area on the RGB image with the mouse
+- Select a pixel on the RGB image :
+    Click on "Pixel Choice" and click on the pixel in the RGB image
+    The pixel's spectrum and the (x,w) and (y,w) images will appear
+- Select a wavelength :
+    Select the Wavelength on the slider or giving a value for W
+    or click on "Wavelength choice" Button and select the Wavelength
+    on the spectrum or on the (x,w) and (y,w) images
+
+Tell me if it works for you...
+
+Hervé
+
+ 
