@@ -24,7 +24,6 @@ RA_def; % file containing all the parameters
 
 %% --- Contour detection:
 
-% 
 if param_ED.run == 1
     [Gr, Gr_x, Gr_y] = contour_from_isolines(panchro_modified,0.92); 
 end
@@ -87,10 +86,6 @@ switch param_REC.method
         Temp_vect = H_C'*gamma*I_V;
 
         for l = 1:length(param_CGNE.mu_x_vect)
-
-        param_CGNE.mu_x = param_CGNE.mu_x_vect(l);
-        param_CGNE.mu_y = param_CGNE.mu_x_vect(l);
-        param_CGNE.mu_lambda = param_CGNE.mu_lambda_vect(l);
         
         tic
         [Cube_REC,epsilon_dx,epsilon_gradx,~] = CGNE_Val(I,FCS,Gr_x,Gr_y, param_CGNE);
@@ -107,18 +102,15 @@ switch param_REC.method
         % -- Specific plot for the direct inversion reconstruction plot:
         figure
         imagesc(sum(Cube_REC_direct,3))
-        title(sprintf('panchro reconstructed (inversion) for mu\_x = %d and lambda = %d ', param_CGNE.mu_x_vect(l),param_CGNE.lambda))
+        title(sprintf('panchro reconstructed (inversion) for mu\_x = %d and lambda = %d ', param_CGNE.mu_x_vect,param_CGNE.lambda))
         xlabel('X\_cam')
         ylabel('Y\_cam')
 
         end
+        
     case 1 % Iterative case
         
         for l = 1:length(param_CGNE.mu_x_vect)
-            
-            param_CGNE.mu_x = param_CGNE.mu_x_vect(l);
-            param_CGNE.mu_y = param_CGNE.mu_y_vect(l);
-            param_CGNE.mu_lambda = param_CGNE.mu_lambda_vect(l);
 
             tic
             [Cube_REC,epsilon_dx,epsilon_gradx,~] = CGNE_Val(I,FCS,Gr_x,Gr_y, param_CGNE);
