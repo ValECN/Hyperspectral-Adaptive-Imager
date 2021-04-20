@@ -132,16 +132,6 @@ IC_bin = spectral_binning(IC, 4);
 %% --- Plots
 
 figure(1)
-x1 = 10; x2 = 2; y1 = 10; 
-plot(squeeze(Cube_REC(x1,y1,:)))
-hold on 
-plot(squeeze(Cube_REC(x2,y1,:)))
-title('Spectra of the reconstructed cube')
-xlabel('Bandwidth')
-ylabel('Amplitude')
-legend(sprintf('Spectra Reconstruction for x = %d and y = %d',x1,y1),sprintf('Spectra Reconstruction for x = %d and y = %d',x2,y1))
-
-figure(2)
 imagesc(sum(Cube_REC,3))
 hold on
 plot([C1+ 0.5, C1+0.5]',[L1+0.5, L1-0.5]','r','LineWidth',2,'PickableParts','none');
@@ -150,6 +140,16 @@ hold off
 title('Contours detected plotted on the reconstruted HSI')
 xlabel('X\_cam')
 ylabel('Y\_cam')
+
+figure(2)
+x1 = 10; x2 = 2; y1 = 10; 
+plot(squeeze(Cube_REC(x1,y1,:)))
+hold on 
+plot(squeeze(Cube_REC(x2,y1,:)))
+title('Spectra of the reconstructed cube')
+xlabel('Bandwidth')
+ylabel('Amplitude')
+legend(sprintf('Spectra Reconstruction for x = %d and y = %d',x1,y1),sprintf('Spectra Reconstruction for x = %d and y = %d',x2,y1))
 
 %% --- Visualization 
  
