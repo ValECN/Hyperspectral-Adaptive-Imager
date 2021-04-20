@@ -25,3 +25,5 @@ param_CGNE.diff_l2 = zeros(length(param_CGNE.mu_x_vect),1);
 param_CGNE.Error_l2 = zeros(length(param_CGNE.mu_x_vect),1);
 param_CGNE.Error_l1 = zeros(length(param_CGNE.mu_x_vect),1);
 param_CGNE.stop_crit = 100;
+
+param_Visualization.run = 0;
