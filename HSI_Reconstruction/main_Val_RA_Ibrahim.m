@@ -10,10 +10,12 @@ close all
 addpath Functions/
 addpath Visualisation/
 path_directory = [pwd, '/acquisition_data'];
+% path_directory = '/home2/vnoel/Documents/Simulateur/simulator_playground/acquisition_data';
 
 %% --- Acquiring the wanted information from the simulated HSI:
 
 [FCS, I, panchro, DMD_conf, IC] = rebuild_aqucube(path_directory);
+% FCS = spectral_binning(FCS, 2);
 [R, C, W, S] = size(FCS);
 RA_def; % file containing all the parameters
 
@@ -22,23 +24,35 @@ RA_def; % file containing all the parameters
 [liste_val, nb_pixels_in_spectra, panchro_modified] = reconfiguration_2D(panchro(:,:,1), 100, 1000);  % reconfigured panchro
 
 %% --- Contour detection:
-
+param_ED.run = 2;
 if param_ED.run == 1
-    [Gr, Gr_x, Gr_y] = contour_from_isolines(panchro_modified,0.92); 
+    [Gr, Gr_x, Gr_y] = contour_from_isolines(panchro_modified,1);
+    % -- Slight manipulations since contours are to be set to 0 for the CGNE:
+
+    nGr_x = [Gr_x, zeros(R,1)];
+    nGr_y = [Gr_y; zeros(1,R)];
+
+    Gr_x = 1 - nGr_x;
+    Gr_y = 1 - nGr_y;
+
+    % -- Lx and Cx for following contour plot:
+
+    [L1, C1] = find(nGr_x);
+    [L2, C2] = find(nGr_y);
+    
+elseif param_ED.run == 2
+    
+    [nGr_x,nGr_y]=EdgeDetect_Function2(panchro_modified);
+    % -- Slight manipulations since contours are to be set to 0 for the CGNE:
+
+    Gr_x = 1 - Gr_x;
+    Gr_y = 1 - Gr_y;
+
+    % -- Lx and Cx for following contour plot:
+
+    [L1, C1] = find(nGr_x);
+    [L2, C2] = find(nGr_y);
 end
-
-% -- Slight manipulations since contours are to be set to 0 for the CGNE:
-
-nGr_x = [Gr_x, zeros(R,1)];
-nGr_y = [Gr_y; zeros(1,R)];
-
-Gr_x = 1 - nGr_x;
-Gr_y = 1 - nGr_y;
-
-% -- Lx and Cx for following contour plot:
-
-[L1, C1] = find(nGr_x);
-[L2, C2] = find(nGr_y);
 
 %% --- The iterative method + direct inverse method
 
@@ -84,7 +98,7 @@ switch param_REC.method
         gamma = spdiags((1./I_V),0,R*C*S,R*C*S);
         Temp_vect = H_C'*gamma*I_V;
 
-        for l = 1:length(param_CGNE.mu_x_vect)
+        for l = 1:length(param_CGNE.mu_x)
         
         tic
         [Cube_REC,epsilon_dx,epsilon_gradx,~] = CGNE_Val(I,FCS,Gr_x,Gr_y, param_CGNE);
@@ -101,7 +115,7 @@ switch param_REC.method
         % -- Specific plot for the direct inversion reconstruction plot:
         figure
         imagesc(sum(Cube_REC_direct,3))
-        title(sprintf('panchro reconstructed (inversion) for mu\_x = %d and lambda = %d ', param_CGNE.mu_x_vect,param_CGNE.lambda))
+        title(sprintf('panchro reconstructed (inversion) for mu_x = %d and lambda = %d ', param_CGNE.mu_x,param_CGNE.mu_lambda))
         xlabel('X\_cam')
         ylabel('Y\_cam')
 
@@ -109,7 +123,7 @@ switch param_REC.method
         
     case 1 % Iterative case
         
-        for l = 1:length(param_CGNE.mu_x_vect)
+        for l = 1:length(param_CGNE.mu_x)
 
             tic
             [Cube_REC,epsilon_dx,epsilon_gradx,~] = CGNE_Val(I,FCS,Gr_x,Gr_y, param_CGNE);

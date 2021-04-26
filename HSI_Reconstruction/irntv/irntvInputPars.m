@@ -155,7 +155,7 @@ switch lower(dname)
     irnPars.adapt_epsR    = 1;
     irnPars.problem       = NMP_L2TV;
     irnPars.variant       = NMP_TV_STANDARD;
-    irnPars.adaptPCGtol   = 1;        
+    irnPars.adaptPCGtol   = 0.1;        
 
   case{'l1tv_nqp'}
     irnPars.p           = 1;

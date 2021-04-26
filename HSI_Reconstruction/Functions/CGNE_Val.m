@@ -2,9 +2,9 @@ function [xi,epsilon_dx,epsilon_gradx,iter]=CGNE_Val(CCD_img_noise,FCS,Gr_x,Gr_y
 
 [R,C,W,S]=size(FCS);
 
-sqrt_mu_x=sqrt(param_CGNE.mu_x_vect);
-sqrt_mu_y=sqrt(param_CGNE.mu_y_vect);
-sqrt_mu_lambda=sqrt(param_CGNE.mu_lambda_vect); 
+sqrt_mu_x=sqrt(param_CGNE.mu_x);
+sqrt_mu_y=sqrt(param_CGNE.mu_y);
+sqrt_mu_lambda=sqrt(param_CGNE.mu_lambda); 
 
 
 %*** Init

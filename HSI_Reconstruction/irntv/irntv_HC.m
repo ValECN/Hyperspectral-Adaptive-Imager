@@ -211,7 +211,7 @@ function[dflag, InputDims, sbstflg, lambda_ini] = check_irntv_options(irntv_Narg
     InputDims = size(KT(S));
   end
   if( (length(InputDims) < 2) && (length(InputDims) > 3) )
-    disp( sprintf('\nInput data has %d dimensions...\n', length(InputDims) ) );
+     fprintf('\nInput data has %d dimensions...\n\n', length(InputDims) ) ;
     error('Not a valid grayscale/color image');
   end
 
@@ -570,7 +570,7 @@ function[U, itstat] = irntv_lptv_denoising(S, lambda, pars, InputDims, dflag, fH
     end % _END_ SWITCH
 
     U = reshape(u, InputDims);
-
+irntv_standard_deconv
 
     % Compute and display functional values and CG status
     % FIXME: mean(lambda(:)) !?
@@ -770,7 +770,7 @@ if isempty(KC),  % Denoising problem
 
   if isempty(pars.U0),
     % Construct initial solution                        
-    [u, flg, rlr, pit] = pcg(@(x) f_IDTD(x, InputDims, pars.lambda_ini ), s, ...
+    [u, ~, rlr, pit] = pcg(@(x) f_IDTD(x, InputDims, pars.lambda_ini ), s, ...
                              pars.pcgtol_ini, pars.pcgitn, [], [], s);
     U = reshape(u, InputDims);
   else
