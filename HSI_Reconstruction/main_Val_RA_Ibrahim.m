@@ -9,22 +9,32 @@ close all
 
 addpath Functions/
 addpath Visualisation/
-path_directory = [pwd, '/acquisition_data'];
-% path_directory = '/home2/vnoel/Documents/Simulateur/simulator_playground/acquisition_data';
+
+param_REC.data = 'A_PSF';
+
+switch param_REC.data
+    case 'K-poon'
+        path_directory = [pwd, '/acquisition_data_1']       
+    case 'A'
+        path_directory = [pwd, '/acquisition_data'];
+    case 'A_PSF'
+        path_directory = [pwd, '/acquisition_data_PSF'];      
+end
 
 %% --- Acquiring the wanted information from the simulated HSI:
 
 [FCS, I, panchro, DMD_conf, IC] = rebuild_aqucube(path_directory);
+% [I,FCS] = data_processing();
 % FCS = spectral_binning(FCS, 2);
 [R, C, W, S] = size(FCS);
 RA_def; % file containing all the parameters
 
 %% --- Re-configuration of the panchro for better contour detection:
 
-[liste_val, nb_pixels_in_spectra, panchro_modified] = reconfiguration_2D(panchro(:,:,1), 100, 1000);  % reconfigured panchro
+[liste_val, nb_pixels_in_spectra, panchro_modified] = reconfiguration_2D(panchro(:,:,1), 100, 100000);  % reconfigured panchro
 
 %% --- Contour detection:
-param_ED.run = 2;
+param_ED.run = 1;
 if param_ED.run == 1
     [Gr, Gr_x, Gr_y] = contour_from_isolines(panchro_modified,1);
     % -- Slight manipulations since contours are to be set to 0 for the CGNE:
@@ -45,8 +55,8 @@ elseif param_ED.run == 2
     [nGr_x,nGr_y]=EdgeDetect_Function2(panchro_modified);
     % -- Slight manipulations since contours are to be set to 0 for the CGNE:
 
-    Gr_x = 1 - Gr_x;
-    Gr_y = 1 - Gr_y;
+    Gr_x = 1 - nGr_x;
+    Gr_y = 1 - nGr_y;
 
     % -- Lx and Cx for following contour plot:
 
@@ -155,14 +165,20 @@ xlabel('X\_cam')
 ylabel('Y\_cam')
 
 figure(2)
-x1 = 10; x2 = 2; y1 = 10; 
+x1 = 8; x2 = 8; y1 = 13; y2 = 24;
 plot(squeeze(Cube_REC(x1,y1,:)))
 hold on 
-plot(squeeze(Cube_REC(x2,y1,:)))
-title('Spectra of the reconstructed cube')
+plot(squeeze(Cube_REC(x2,y2,:)))
+title('Spectra of the reconstructed cube using RA')
 xlabel('Bandwidth')
 ylabel('Amplitude')
-legend(sprintf('Spectra Reconstruction for x = %d and y = %d',x1,y1),sprintf('Spectra Reconstruction for x = %d and y = %d',x2,y1))
+legend(sprintf('Spectra Reconstruction for x = %d and y = %d',x1,y1),sprintf('Spectra Reconstruction for x = %d and y = %d',x2,y2))
+grid on
+ax = gca;
+ax.GridColor = [0 .5 .5];
+ax.GridLineStyle = '--';
+ax.GridAlpha = 0.5;
+ax.Layer = 'top';
 
 %% --- Visualization 
 
@@ -174,3 +190,14 @@ if param_Visualization.run == 1
     % -- Visualization
     Visual_HyperSpectral_2019(Cube_REC)
 end
+
+%% --- Metrics
+
+IC_bin = spectral_binning(IC,1);
+if size(IC_bin,3) > W
+    IC_bin = IC_bin(:,:,1:W);
+end
+[ssim_val, ssim_map] = SSIM_map(IC_bin, Cube_REC);
+[RMSE_map] = RMSE_map(IC_bin, Cube_REC);
+[SAM_map] = SAM_map(IC_bin, Cube_REC);
+RMSE = error_HSI(IC_bin, Cube_REC,'l2');

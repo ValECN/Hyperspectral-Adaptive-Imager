@@ -326,8 +326,9 @@ if ~isempty(h0_title)
         W = val_lig;
     end
 end    
-if ~isempty(W),
+if ~isempty(W)
     W = floor(W);
+%     W = size(Object_cube,3);
     cla(handles.axes_xy)
     set(handles.slider_W,'Value',W);
     set(handles.edit_W,'String',W);

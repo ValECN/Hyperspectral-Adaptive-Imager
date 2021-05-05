@@ -17,6 +17,7 @@ end
 
 
 factor = 4;
+l_val = length(liste_val);
 
 while length(liste_val) > R/4
     uniq = unique(round(liste_val,factor));
