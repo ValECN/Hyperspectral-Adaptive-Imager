@@ -6,7 +6,7 @@ addpath 'irntv'
 addpath 'Functions'
 addpath Visualisation/
 
-param_REC.data = 'A_PSF';
+param_REC.data = 'A_PSF_10';
 
 switch param_REC.data
     case 'K-poon'
@@ -15,6 +15,8 @@ switch param_REC.data
         path_directory = [pwd, '/acquisition_data'];
     case 'A_PSF'
         path_directory = [pwd, '/acquisition_data_PSF'];      
+    case 'A_PSF_10'
+        path_directory = [pwd, '/acquisition_data_PSF10'];  
 end
 
 nmpdef;

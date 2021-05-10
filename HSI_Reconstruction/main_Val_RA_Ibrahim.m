@@ -10,15 +10,17 @@ close all
 addpath Functions/
 addpath Visualisation/
 
-param_REC.data = 'A_PSF';
+param_REC.data = 'A_PSF_10';
 
 switch param_REC.data
     case 'K-poon'
-        path_directory = [pwd, '/acquisition_data_1']       
+        path_directory = [pwd, '/acquisition_data_1'];       
     case 'A'
         path_directory = [pwd, '/acquisition_data'];
     case 'A_PSF'
         path_directory = [pwd, '/acquisition_data_PSF'];      
+    case 'A_PSF_10'
+        path_directory = [pwd, '/acquisition_data_PSF10'];  
 end
 
 %% --- Acquiring the wanted information from the simulated HSI:

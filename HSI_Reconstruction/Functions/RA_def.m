@@ -14,9 +14,9 @@ param_OBJ.MAX_ADU = 3800;
 param_OBJ.bits = 12;
 
 param_CGNE.lambda =  1;
-param_CGNE.mu_x = 15e-1; %logspace(-7,2,11);
+param_CGNE.mu_x = 30e-1;%15e-1 %logspace(-7,2,11);
 param_CGNE.mu_y = param_CGNE.mu_x;
-param_CGNE.mu_lambda = 12e-1; %12e-1; % param_CGNE.mu_x_vect * param_CGNE.lambda;
+param_CGNE.mu_lambda = 3e-1; %12e-1; % param_CGNE.mu_x_vect * param_CGNE.lambda;
 param_CGNE.Stopcriter = 'Eps';
 param_CGNE.epsilonx   = 10^(-4);
 param_CGNE.noise_type='i' ;                                                 % = 'i';'ii';'iis'
